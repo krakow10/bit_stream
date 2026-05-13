@@ -14,3 +14,7 @@ pub use bit_counter::BitCounter;
 mod bit_reader_le;
 pub use bit_reader_le::BitReaderLe;
 pub type CountedBitReaderLe<'a> = BitCounter<BitReaderLe<'a>>;
+
+mod bit_reader_be;
+pub use bit_reader_be::BitReaderBe;
+pub type CountedBitReaderBe<'a> = BitCounter<BitReaderBe<'a>>;
