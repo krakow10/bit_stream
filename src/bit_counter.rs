@@ -5,6 +5,12 @@ pub enum BitCounterError {
 	NotEnoughBytes,
 	NotEnoughBits,
 }
+impl core::fmt::Display for BitCounterError {
+	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+		write!(f, "{self:?}")
+	}
+}
+impl core::error::Error for BitCounterError {}
 
 /// A bit counter.
 /// Bit count starts at 0 and goes up when reading.
