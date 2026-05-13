@@ -2,6 +2,8 @@ use crate::end_array_chunks::end_array_chunks;
 
 use super::{BitRead, Cache};
 
+/// Read bits from the slice in order. Bits are read as if
+/// from each byte, starting from the least significant bit.
 pub struct BitReaderLe<'a> {
 	chunks: core::slice::Iter<'a, [u8; size_of::<Cache>()]>,
 	cache: Cache,
