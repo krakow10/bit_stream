@@ -4,7 +4,7 @@ Bit Stream
 [![Latest version](https://img.shields.io/crates/v/bit_stream.svg)](https://crates.io/crates/bit_stream)
 ![License](https://img.shields.io/crates/l/bit_stream.svg)
 
-`bit_stream` is a collection of low-level adapters for reading and writing bits.
+`bit_stream` is intended to be a collection of low-level adapters for reading and writing bits, but currently only includes readers.
 
 Curently includes:
 - BitReaderLe
