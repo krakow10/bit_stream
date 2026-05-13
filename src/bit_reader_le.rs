@@ -90,6 +90,7 @@ fn test_read_bits() {
 #[test]
 fn test_read_sequence() {
 	let mut r = BitReaderLe::new(b"asd");
+	// reading bits from right to left <--
 	// dsa 011_00100 011_1001_1 011_00_001
 	assert_eq!(r.read(3), 0b001);
 	assert_eq!(r.read(2), 0b00);
