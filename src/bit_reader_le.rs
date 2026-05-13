@@ -45,6 +45,8 @@ impl<'a> BitRead for BitReaderLe<'a> {
 					self.cache_bits = Cache::BITS as usize;
 				}
 				None => {
+					self.cache = 0;
+					self.cache_bits = 0;
 					break;
 				}
 			};
