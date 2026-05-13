@@ -1,4 +1,4 @@
-use super::Cache;
+use super::{BitRead, Cache};
 
 pub struct BitReaderLe<'a> {
 	chunks: core::slice::ChunksExact<'a, u8>,
@@ -13,8 +13,10 @@ impl<'a> BitReaderLe<'a> {
 			cache_bits: 0,
 		}
 	}
-
-	pub fn read(&mut self, bits: usize) -> Cache {
+}
+impl<'a> BitRead for BitReaderLe<'a> {
+	type Output = Cache;
+	fn read(&mut self, bits: usize) -> Cache {
 		debug_assert!(bits < Cache::BITS as usize);
 
 		let mut value = 0;
