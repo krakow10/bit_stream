@@ -39,17 +39,11 @@ impl<'a> BitRead for BitReaderLe<'a> {
 			value |= self.cache.unbounded_shl(value_bits as u32);
 			value_bits += self.cache_bits;
 
-			match self.chunks.next() {
-				Some(chunk) => {
-					self.cache = Cache::from_le_bytes(*chunk);
-					self.cache_bits = Cache::BITS as usize;
-				}
-				None => {
-					self.cache = 0;
-					self.cache_bits = 0;
-					break;
-				}
+			self.cache = match self.chunks.next() {
+				Some(chunk) => Cache::from_le_bytes(*chunk),
+				None => 0,
 			};
+			self.cache_bits = Cache::BITS as usize;
 		}
 
 		// populate value with cached bits
