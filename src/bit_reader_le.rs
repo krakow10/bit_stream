@@ -21,6 +21,11 @@ impl<'a> BitReaderLe<'a> {
 		}
 	}
 }
+impl<'a> From<&'a [u8]> for BitReaderLe<'a> {
+	fn from(value: &'a [u8]) -> Self {
+		Self::new(value)
+	}
+}
 impl<'a> BitRead for BitReaderLe<'a> {
 	type Output = Cache;
 	fn read(&mut self, bits: usize) -> Cache {

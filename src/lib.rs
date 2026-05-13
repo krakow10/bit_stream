@@ -8,9 +8,9 @@ pub trait BitRead {
 
 mod end_array_chunks;
 
-mod bit_reader_le;
-pub use bit_reader_le::BitReaderLe;
-
 mod bit_counter;
 pub use bit_counter::BitCounter;
+
+mod bit_reader_le;
+pub use bit_reader_le::BitReaderLe;
 pub type CountedBitReaderLe<'a> = BitCounter<BitReaderLe<'a>>;
