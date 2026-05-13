@@ -12,7 +12,7 @@ pub struct BitCounter<S> {
 	bit_count: usize,
 }
 
-impl<'a, S:From<&'a [u8]>> BitCounter<S> {
+impl<'a, S: From<&'a [u8]>> BitCounter<S> {
 	pub fn new_reader(bytes: &'a [u8], bit_count_limit: usize) -> Result<Self, BitCounterError> {
 		if (bytes.len() * u8::BITS as usize) < bit_count_limit {
 			return Err(BitCounterError::NotEnoughBytes);
