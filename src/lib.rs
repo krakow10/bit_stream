@@ -11,14 +11,14 @@ pub trait BitRead {
 mod end_array_chunks;
 
 mod bit_counter;
-pub use bit_counter::BitCounter;
+pub use bit_counter::*;
 
 mod bit_reader_le;
-pub use bit_reader_le::BitReaderLe;
+pub use bit_reader_le::*;
 pub type CountedBitReaderLe<'a> = BitCounter<BitReaderLe<'a>>;
 
 mod bit_reader_be;
-pub use bit_reader_be::BitReaderBe;
+pub use bit_reader_be::*;
 pub type CountedBitReaderBe<'a> = BitCounter<BitReaderBe<'a>>;
 
 // test readme
