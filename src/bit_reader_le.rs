@@ -29,7 +29,7 @@ impl<'a> From<&'a [u8]> for BitReaderLe<'a> {
 impl<'a> BitRead for BitReaderLe<'a> {
 	type Output = Cache;
 	fn read(&mut self, bits: usize) -> Cache {
-		debug_assert!(bits < Cache::BITS as usize);
+		debug_assert!(bits <= Cache::BITS as usize);
 
 		let mut value = 0;
 		let mut value_bits = 0;
