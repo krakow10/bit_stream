@@ -11,7 +11,7 @@ impl<'a> BitReaderLe<'a> {
 	pub fn new(bytes: &'a [u8]) -> Self {
 		let (rem, chunks) = end_array_chunks(bytes);
 
-		let mut chunk = Cache::MIN.to_le_bytes();
+		let mut chunk = [0; _];
 		chunk[..rem.len()].copy_from_slice(rem);
 
 		Self {
