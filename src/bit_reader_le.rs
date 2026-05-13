@@ -22,15 +22,7 @@ impl<'a> BitReaderLe<'a> {
 			cache_bits: rem.len() * u8::BITS as usize,
 		}
 	}
-}
-impl<'a> From<&'a [u8]> for BitReaderLe<'a> {
-	fn from(value: &'a [u8]) -> Self {
-		Self::new(value)
-	}
-}
-impl<'a> BitRead for BitReaderLe<'a> {
-	type Output = Cache;
-	fn read(&mut self, bits: usize) -> Cache {
+	pub fn read_le(&mut self, bits: usize) -> Cache {
 		debug_assert!(bits <= Cache::BITS as usize);
 
 		let mut value = 0;
@@ -52,6 +44,17 @@ impl<'a> BitRead for BitReaderLe<'a> {
 		self.cache = self.cache.unbounded_shr(draw_bits as u32);
 		self.cache_bits -= draw_bits;
 		value
+	}
+}
+impl<'a> From<&'a [u8]> for BitReaderLe<'a> {
+	fn from(value: &'a [u8]) -> Self {
+		Self::new(value)
+	}
+}
+impl<'a> BitRead for BitReaderLe<'a> {
+	type Output = Cache;
+	fn read(&mut self, bits: usize) -> Cache {
+		self.read_le(bits)
 	}
 }
 
