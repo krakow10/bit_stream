@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "bit_reader"
+name = "bit_stream"
 version = "0.1.0"
