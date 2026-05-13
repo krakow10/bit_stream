@@ -1,6 +1,6 @@
 use super::BitRead;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum BitCounterError {
 	NotEnoughBytes,
 	NotEnoughBits,
@@ -15,7 +15,7 @@ impl core::error::Error for BitCounterError {}
 /// A bit counter.
 /// Bit count starts at 0 and goes up when reading.
 /// Bit count starts at the read limit and goes down when reading.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BitCounter<S> {
 	bit_stream: S,
 	bit_count: usize,

@@ -4,6 +4,7 @@ use super::{BitRead, Cache};
 
 /// Read bits from the slice in order. Bits are read as if
 /// from each byte, starting from the least significant bit.
+#[derive(Debug, Clone)]
 pub struct BitReaderLe<'a> {
 	chunks: core::slice::Iter<'a, [u8; size_of::<Cache>()]>,
 	cache: Cache,
