@@ -1,3 +1,5 @@
+#![no_std]
+
 /// Buffer size for read and write
 type Cache = usize;
 
