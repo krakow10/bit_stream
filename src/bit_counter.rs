@@ -7,7 +7,7 @@ pub enum BitCounterError {
 }
 
 /// A bit counter.
-/// Bit count start at 0 and goes up when reading.
+/// Bit count starts at 0 and goes up when reading.
 /// Bit count starts at the read limit and goes down when reading.
 #[derive(Debug)]
 pub struct BitCounter<S> {
