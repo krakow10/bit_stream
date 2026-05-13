@@ -1,16 +1,23 @@
+use crate::end_array_chunks::end_array_chunks;
+
 use super::{BitRead, Cache};
 
 pub struct BitReaderLe<'a> {
-	chunks: core::slice::ChunksExact<'a, u8>,
+	chunks: core::slice::Iter<'a, [u8; size_of::<Cache>()]>,
 	cache: Cache,
 	cache_bits: usize,
 }
 impl<'a> BitReaderLe<'a> {
 	pub fn new(bytes: &'a [u8]) -> Self {
+		let (rem, chunks) = end_array_chunks(bytes);
+
+		let mut chunk = Cache::MIN.to_le_bytes();
+		chunk[..rem.len()].copy_from_slice(rem);
+
 		Self {
-			chunks: bytes.chunks_exact(size_of::<Cache>()),
-			cache: 0,
-			cache_bits: 0,
+			chunks: chunks.iter(),
+			cache: Cache::from_le_bytes(chunk),
+			cache_bits: rem.len() * u8::BITS as usize,
 		}
 	}
 }
@@ -29,20 +36,10 @@ impl<'a> BitRead for BitReaderLe<'a> {
 
 			match self.chunks.next() {
 				Some(chunk) => {
-					self.cache = Cache::from_le_bytes(chunk.try_into().unwrap());
+					self.cache = Cache::from_le_bytes(*chunk);
 					self.cache_bits = Cache::BITS as usize;
 				}
 				None => {
-					let mut chunk = Cache::MIN.to_le_bytes();
-					let rem = self.chunks.remainder();
-					chunk[..rem.len()].copy_from_slice(rem);
-
-					// we have emptied the remainder.
-					// replace the iterator with empty data
-					self.chunks = [].chunks_exact(size_of::<Cache>());
-
-					self.cache = Cache::from_le_bytes(chunk);
-					self.cache_bits = rem.len() * u8::BITS as usize;
 					break;
 				}
 			};
