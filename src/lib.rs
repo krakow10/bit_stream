@@ -18,3 +18,8 @@ pub type CountedBitReaderLe<'a> = BitCounter<BitReaderLe<'a>>;
 mod bit_reader_be;
 pub use bit_reader_be::BitReaderBe;
 pub type CountedBitReaderBe<'a> = BitCounter<BitReaderBe<'a>>;
+
+// test readme
+#[doc = include_str!("../README.md")]
+#[cfg(doctest)]
+struct ReadmeDoctests;
