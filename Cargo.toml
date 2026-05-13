@@ -2,5 +2,10 @@
 name = "bit_stream"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/krakow10/bit_stream"
+license = "MIT OR Apache-2.0"
+description = "Read and write bits."
+authors = ["Rhys Lloyd <krakow20@gmail.com>"]
+keywords = ["bit", "bits", "reader", "no_std"]
 
 [dependencies]
