@@ -1,14 +1,13 @@
+use crate::BitRead;
+use crate::bit_buffer::{BitBuffer, Cache};
 use crate::end_array_chunks::end_array_chunks;
-
-use super::{BitRead, Cache};
 
 /// Read bits from the slice in order. Bits are read as if
 /// from each byte, starting from the most significant bit.
 #[derive(Debug, Clone)]
 pub struct BitReaderBe<'a> {
 	chunks: core::slice::Iter<'a, [u8; size_of::<Cache>()]>,
-	cache: Cache,
-	cache_bits: usize,
+	cache: BitBuffer,
 }
 impl<'a> BitReaderBe<'a> {
 	pub fn new(bytes: &'a [u8]) -> Self {
@@ -19,32 +18,30 @@ impl<'a> BitReaderBe<'a> {
 
 		Self {
 			chunks: chunks.iter(),
-			cache: Cache::from_be_bytes(chunk),
-			cache_bits: rem.len() * u8::BITS as usize,
+			cache: BitBuffer::new(Cache::from_be_bytes(chunk), rem.len() * u8::BITS as usize),
 		}
 	}
 	pub fn read_be(&mut self, bits: usize) -> Cache {
 		debug_assert!(bits <= Cache::BITS as usize);
 
-		let mut value: Cache = 0;
-		let mut value_bits = 0;
+		let mut value = BitBuffer::empty();
 
 		// popluate cache with enough bits to fill value
-		while self.cache_bits + value_bits < bits {
-			value = value.unbounded_shl(self.cache_bits as u32) | self.cache;
-			value_bits += self.cache_bits;
+		while self.cache.bits() + value.bits() < bits {
+			// This won't work if cache is a different size from value
+			let (buffer, bits) = self.cache.take();
+			value.push_lsb(bits, buffer);
 
-			self.cache = self.chunks.next().copied().map_or(0, Cache::from_be_bytes);
-			self.cache_bits = Cache::BITS as usize;
+			self.cache = BitBuffer::new(
+				self.chunks.next().copied().map_or(0, Cache::from_be_bytes),
+				Cache::BITS as usize,
+			);
 		}
 
 		// populate value with cached bits
-		let draw_bits = bits - value_bits;
-		let mask = (1 as Cache).unbounded_shl(draw_bits as u32).wrapping_sub(1);
-		value = (value << draw_bits) | (self.cache >> (self.cache_bits - draw_bits));
-		self.cache &= !mask.unbounded_shl((self.cache_bits - draw_bits) as u32);
-		self.cache_bits -= draw_bits;
-		value
+		let draw_bits = bits - value.bits();
+		value.push_lsb(draw_bits, self.cache.pop_msb(draw_bits));
+		value.value()
 	}
 }
 impl<'a> From<&'a [u8]> for BitReaderBe<'a> {
