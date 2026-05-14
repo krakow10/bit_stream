@@ -76,7 +76,7 @@ fn test_read_bits() {
 	fn assert_s(shift: usize) {
 		assert_eq!(
 			BitReaderBe::new(b"s").read(shift),
-			('s' as u8 & (1u8.unbounded_shl(shift as u32) - 1).reverse_bits())
+			('s' as u8 & (1u8.unbounded_shl(shift as u32).wrapping_sub(1)).reverse_bits())
 				.unbounded_shr(u8::BITS - shift as u32) as Cache
 		);
 	}
